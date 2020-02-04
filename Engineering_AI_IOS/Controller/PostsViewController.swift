@@ -39,6 +39,17 @@ class PostsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.showSpinner(destination: .center, activityIndicator: spinner)
         fetchData()
     }
+    // MARK: - RefreshAction
+    @objc func refreshAction(){
+        guard Reachability.isConnectedToNetwork() else {
+            self.showAlert(title: "Check internet connection")
+            return
+        }
+        pageCount = 1
+        selectedCount = 0
+        self.title = "Selected Posts: \(selectedCount)"
+        fetchData()
+    }
     // MARK: - FetchData
     func fetchData() {
         getPosts { [weak self] in
@@ -50,17 +61,6 @@ class PostsViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self?.postsTableView.reloadData()
             }
         }
-    }
-    // MARK: - RefreshAction
-    @objc func refreshAction(){
-        guard Reachability.isConnectedToNetwork() else {
-            self.showAlert(title: "Check internet connection")
-            return
-        }
-        pageCount = 1
-        selectedCount = 0
-        self.title = "Selected Posts: \(selectedCount)"
-        fetchData()
     }
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
